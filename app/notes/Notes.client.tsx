@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useDebouncedCallback } from "use-debounce";
 import css from "./NotesPage.module.css";
@@ -33,9 +33,11 @@ export default function NotesClient() {
   const notes = data?.notes ?? [];
   const totalPages = data?.totalPages ?? 0;
 
-  if (data && data.notes.length === 0 && page > 1) {
-    setPage((currentPage) => currentPage - 1);
-  }
+  useEffect(() => {
+    if (data && data.notes.length === 0 && page > 1) {
+      setPage((currentPage) => currentPage - 1);
+    }
+  }, [data, page]);
 
   const closeModal = useCallback(() => {
     setIsModalOpen(false);
